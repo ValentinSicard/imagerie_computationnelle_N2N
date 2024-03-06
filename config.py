@@ -68,8 +68,8 @@ corruption_types = {
 # ------------------------------------------------------------------------------------------
 
 train_config = dnnlib.EasyDict(
-    iteration_count=300000,
-    eval_interval=1000,
+    iteration_count=300,
+    eval_interval=50,
     minibatch_size=4,
     run_func_name="train.train",
     learning_rate=0.0003,
@@ -77,7 +77,7 @@ train_config = dnnlib.EasyDict(
     noise=gaussian_noise_config,
 #    noise=poisson_noise_config,
     noise2noise=True,
-    train_tfrecords='datasets/imagenet_val_raw.tfrecords',
+    train_tfrecords='datasets/images.tfrecords',
     validation_config=default_validation_config
 )
 
@@ -122,12 +122,12 @@ if __name__ == "__main__":
             n2n = args.noise2noise if 'noise2noise' in args else True
             train_config.noise2noise = n2n
             if 'long_train' in args and args.long_train:
-                train_config.iteration_count = 500000
-                train_config.eval_interval = 5000
+                train_config.iteration_count = 1000
+                train_config.eval_interval = 10
                 train_config.ramp_down_perc = 0.5
         else:
             print ('running with defaults in train_config')
-        noise = 'gaussian'
+        noise = 'poisson'
         if 'noise' in args:
             if args.noise not in corruption_types:
                 error('Unknown noise type', args.noise)
